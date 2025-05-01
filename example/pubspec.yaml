@@ -1,0 +1,26 @@
+name: auth_package_example
+description: Demonstration app for auth_package
+publish_to: 'none'   # prevent accidental pub.dev publish
+
+environment:
+  sdk: ">=2.17.0 <4.0.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+  # Point at your local package. Change ../ to wherever the package folder is.
+  auth_package:
+    path: ../
+
+  # If your package depends on these, include them here too:
+  dio: ^5.0.0
+  dartz: ^0.10.0
+  intl: any            # because AuthRepoImpl uses intl for DateFormat
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+
+flutter:
+  uses-material-design: true
