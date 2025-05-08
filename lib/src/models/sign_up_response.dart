@@ -12,12 +12,21 @@ class SignUpResponse {
   });
 
   factory SignUpResponse.fromJson(Map<String, dynamic> json) {
-    final data = json['data']['data'];
+    final data = json['data']?['data'] ?? json;
     return SignUpResponse(
       token: data['token'] ?? '',
       clientName: data['clientName'] ?? '',
       isNewUser: data['isNewUser'] ?? false,
       phoneNumber: data['phoneNumber'] ?? '',
     );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'token': token,
+      'clientName': clientName,
+      'isNewUser': isNewUser,
+      'phoneNumber': phoneNumber,
+    };
   }
 }

@@ -10,4 +10,11 @@ class OtpResponse {
       success: json['success'] ?? false,
     );
   }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'message': message,
+      'success': success,
+    };
+  }
 }

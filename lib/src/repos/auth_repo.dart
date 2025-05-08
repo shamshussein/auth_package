@@ -1,20 +1,21 @@
 import 'package:dartz/dartz.dart';
-import '../errors/failure.dart';
-import '../models/otp_response.dart';
-import '../models/confirm_otp_response.dart';
-import '../models/sign_up_response.dart';
+import '../../auth_package.dart';
 
+/// Interface for authentication operations
 abstract class AuthRepo {
+  /// Generate OTP for phone verification
   Future<Either<Failure, OtpResponse>> generateOtp({
     required String phoneNumber,
     required String countryCode,
   });
 
+  /// Confirm OTP verification code
   Future<Either<Failure, ConfirmOtpResponse>> confirmOtp({
     required String phoneNumber,
     required String otp,
   });
 
+  /// Sign up a new user
   Future<Either<Failure, SignUpResponse>> signUp({
     required String phoneNumber,
     required String firstName,
@@ -24,5 +25,6 @@ abstract class AuthRepo {
     required String countryCode,
   });
 
+  /// Refresh Firebase Cloud Messaging token
   Future<Either<Failure, void>> refreshFcmToken(String token);
 }

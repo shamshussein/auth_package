@@ -1,15 +1,15 @@
 import 'package:dartz/dartz.dart';
 import 'package:dio/dio.dart';
-import '../errors/failure.dart';
-import '../models/otp_response.dart';
-import '../models/confirm_otp_response.dart';
-import '../models/sign_up_response.dart';
-import '../utils/api_service.dart';
-import 'auth_repo.dart';
 import 'package:intl/intl.dart';
+import '../../auth_package.dart';
+
+/// Implementation of the AuthRepo interface
 class AuthRepoImpl implements AuthRepo {
-  final ApiService apiService;
-  AuthRepoImpl(this.apiService);
+  final ApiService _apiService;
+  final AuthConfig _config;
+
+  /// Constructor
+  AuthRepoImpl(this._apiService, this._config);
 
   @override
   Future<Either<Failure, OtpResponse>> generateOtp({
@@ -17,13 +17,17 @@ class AuthRepoImpl implements AuthRepo {
     required String countryCode,
   }) async {
     try {
-      final res = await apiService.post(
-        endPoint: 'Accounts/GenerateOtp',
-        data: { 'PhoneNumber': phoneNumber, 'CountryCode': countryCode },
+      final res = await _apiService.post(
+        endPoint: _config.getEndpoint('generateOtp'),
+        data: {
+          'PhoneNumber': phoneNumber,
+          'CountryCode': countryCode,
+        },
       );
       return Right(OtpResponse.fromJson(res));
+    } on DioException catch (e) {
+      return Left(ServerFailure.fromDioError(e));
     } catch (e) {
-      if (e is DioError) return Left(ServerFailure.fromDioError(e));
       return Left(ServerFailure(e.toString()));
     }
   }
@@ -34,13 +38,17 @@ class AuthRepoImpl implements AuthRepo {
     required String otp,
   }) async {
     try {
-      final res = await apiService.post(
-        endPoint: 'Accounts/ConfirmOtp',
-        data: { 'phoneNumber': phoneNumber, 'otp': otp },
+      final res = await _apiService.post(
+        endPoint: _config.getEndpoint('confirmOtp'),
+        data: {
+          'phoneNumber': phoneNumber,
+          'otp': otp,
+        },
       );
       return Right(ConfirmOtpResponse.fromJson(res));
+    } on DioException catch (e) {
+      return Left(ServerFailure.fromDioError(e));
     } catch (e) {
-      if (e is DioError) return Left(ServerFailure.fromDioError(e));
       return Left(ServerFailure(e.toString()));
     }
   }
@@ -56,8 +64,8 @@ class AuthRepoImpl implements AuthRepo {
   }) async {
     try {
       final dobStr = DateFormat('yyyy-MM-dd').format(dob);
-      final res = await apiService.post(
-        endPoint: 'Accounts/SignUserUp',
+      final res = await _apiService.post(
+        endPoint: _config.getEndpoint('signUp'),
         data: {
           'PhoneNumber': phoneNumber,
           'FirstName': firstName,
@@ -68,8 +76,9 @@ class AuthRepoImpl implements AuthRepo {
         },
       );
       return Right(SignUpResponse.fromJson(res));
+    } on DioException catch (e) {
+      return Left(ServerFailure.fromDioError(e));
     } catch (e) {
-      if (e is DioError) return Left(ServerFailure.fromDioError(e));
       return Left(ServerFailure(e.toString()));
     }
   }
@@ -77,13 +86,16 @@ class AuthRepoImpl implements AuthRepo {
   @override
   Future<Either<Failure, void>> refreshFcmToken(String token) async {
     try {
-      await apiService.put(
-        endPoint: 'Accounts/RefreshFcmToken',
-        data: { 'fcmToken': token },
+      await _apiService.put(
+        endPoint: _config.getEndpoint('refreshFcmToken'),
+        data: {
+          'fcmToken': token,
+        },
       );
       return const Right(null);
+    } on DioException catch (e) {
+      return Left(ServerFailure.fromDioError(e));
     } catch (e) {
-      if (e is DioError) return Left(ServerFailure.fromDioError(e));
       return Left(ServerFailure(e.toString()));
     }
   }
