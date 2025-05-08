@@ -2,10 +2,8 @@ import 'package:dio/dio.dart';
 
 /// Base failure class for all errors
 abstract class Failure {
-  /// Error message
   final String errMessage;
 
-  /// Constructor
   Failure(this.errMessage);
 }
 
@@ -14,10 +12,8 @@ class ServerFailure extends Failure {
   /// HTTP status code (if applicable)
   final int? statusCode;
 
-  /// Raw response data
   final dynamic responseData;
 
-  /// Constructor
   ServerFailure(
       String errMessage, {
         this.statusCode,

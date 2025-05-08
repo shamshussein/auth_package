@@ -13,20 +13,17 @@ class AuthPackage {
     Map<String, String>? endpoints,
     List<Interceptor>? interceptors,
   }) {
-    // Set up configuration
     _config = AuthConfig(
       baseUrl: baseUrl,
       endpoints: endpoints,
     );
 
-    // Create API service with optional interceptors
     final dio = Dio(BaseOptions(baseUrl: _config.baseUrl));
     if (interceptors != null) {
       dio.interceptors.addAll(interceptors);
     }
     _apiService = ApiService(dio);
 
-    // Initialize repositories
     _authRepo = AuthRepoImpl(_apiService, _config);
   }
 
