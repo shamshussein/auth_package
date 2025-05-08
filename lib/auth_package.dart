@@ -15,9 +15,10 @@ export 'src/repos/auth_repo.dart';
 export 'src/repos/auth_repo_impl.dart';
 
 // Business logic / state management exports
-export 'src/state/otp_cubit.dart';
-export 'src/state/confirm_otp_cubit.dart';
-export 'src/state/sign_up_cubit.dart';
+export 'src/state/auth_providers.dart';
+export 'src/state/otp_provider.dart';
+export 'src/state/confirm_otp_provider.dart';
+export 'src/state/sign_up_provider.dart';
 
 // Package initialization
 export 'src/auth_package.dart';
